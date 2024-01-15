@@ -1,9 +1,9 @@
-import FlashCards from "./components/flashcards";
+import Accordion from "./components/Accordion";
 
 function App() {
   return (
     <div className="App">
-      <FlashCards />
+      <Accordion />
     </div>
   );
 }
