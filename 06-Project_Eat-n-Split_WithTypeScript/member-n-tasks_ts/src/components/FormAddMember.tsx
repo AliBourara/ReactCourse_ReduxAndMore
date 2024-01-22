@@ -1,33 +1,34 @@
 import { useState } from "react";
-import { FriendsType } from "../data";
+import { MembersType } from "../data";
 import Button from "./Button";
 
-interface FormAddFriendViewProps {
-  onAddFriend: (friend: FriendsType) => void;
+interface FormAddMemberViewProp {
+  onAddMember: (member: MembersType) => void;
 }
-export default function FormAddFriend({ onAddFriend }: FormAddFriendViewProps) {
+
+const FormAddMember = ({ onAddMember }: FormAddMemberViewProp) => {
   const [name, setName] = useState<string>("");
   const [image, setImage] = useState<string>(
     "https://i.pravatar.cc/48?u=118836"
   );
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmitMember(e: React.FormEvent) {
     e.preventDefault();
     if (!name || !image) return;
     const id = crypto.randomUUID();
-    const newFriend: FriendsType = {
+    const newMember: MembersType = {
       name,
       image: `${image}?=${id}`,
-      balance: 0,
+      task: {},
       id,
     };
-    onAddFriend(newFriend);
+    onAddMember(newMember);
     setName("");
     setImage("https://i.pravatar.cc/48?u=118836");
   }
   return (
-    <form className="form-add-friend" onSubmit={handleSubmit}>
-      <label>🧑‍🤝‍🧑Friend Name</label>
+    <form className="form-add-friend" onSubmit={handleSubmitMember}>
+      <label>🧑‍🤝‍🧑Member Name</label>
       <input
         type="text"
         value={name}
@@ -42,4 +43,6 @@ export default function FormAddFriend({ onAddFriend }: FormAddFriendViewProps) {
       <Button>Add</Button>
     </form>
   );
-}
+};
+
+export default FormAddMember;

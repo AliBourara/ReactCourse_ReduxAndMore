@@ -1,0 +1,16 @@
+  function handleNewTask(newTask: string) {
+    setMembers((members) =>
+      members.map((member) =>
+        member.id === selectedMember?.id
+          ? {
+              ...member,
+              task: [...member.task, newTask],
+            }
+          : member
+      )
+    );
+    setSelectedMember(null);
+  }
+
+
+ // --------------------- this function is an exemple to map in array and add to that array 

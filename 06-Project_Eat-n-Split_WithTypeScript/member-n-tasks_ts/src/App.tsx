@@ -1,59 +1,78 @@
 import { useState } from "react";
-import { FriendsType, initialFriends } from "./data";
-import FriendsList from "./components/FriendsList";
-import FormAddFriend from "./components/FormAddFriend";
+import MembersList from "./components/MembersList";
+import { MembersType, initialMembers } from "./data";
 import Button from "./components/Button";
-import FormSplitBill from "./components/FormSplitBill";
+import FormAddMember from "./components/FormAddMember";
+import MemberTasksView from "./components/MemberTasksView";
 
 function App() {
-  const [friends, setFriends] = useState<FriendsType[]>(initialFriends);
+  const [members, setMembers] = useState<MembersType[]>(initialMembers);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedFriend, setSelectedFriend] = useState<FriendsType | null>(
+  const [selectedMember, setSelectedMember] = useState<MembersType | null>(
     null
   );
-  function handleToggle() {
+
+  function handleAddMember(member: MembersType) {
+    setMembers((members) => [...members, member]);
+    setIsOpen(false);
+  }
+  function handleToggleButton() {
     setIsOpen((isOpen) => !isOpen);
   }
 
-  function handleAddFriend(friend: FriendsType) {
-    setFriends((friends) => [...friends, friend]);
-    setIsOpen(false);
-  }
-  function handleSelection(friend: FriendsType) {
-    setSelectedFriend((currSelected) =>
-      currSelected?.id === friend.id ? null : friend
+  function handelSelectMember(member: MembersType) {
+    setSelectedMember((currSelected) =>
+      currSelected?.id === member.id ? null : member
     );
     setIsOpen(false);
   }
-  function handleSplitBill(value: number) {
-    setFriends((friends) =>
-      friends.map((friend) =>
-        friend.id === selectedFriend?.id
-          ? { ...friend, balance: friend.balance + value }
-          : friend
+  function handleNewTask(newTask: string) {
+    const id = crypto.randomUUID();
+    setMembers((members) =>
+      members.map((member) =>
+        member.id === selectedMember?.id
+          ? {
+              ...member,
+              task: {
+                ...member.task,
+                [id]: { id: id, content: newTask, state: false },
+              },
+            }
+          : member
       )
     );
-    setSelectedFriend(null);
+    setSelectedMember(null);
   }
+  function handleCheckTasks(id: string) {
+    if (selectedMember) {
+      selectedMember.task[id].state = !selectedMember.task[id].state;
+    }
+
+    setMembers((members) =>
+      members.map((member) =>
+        member.id === selectedMember?.id ? selectedMember : member
+      )
+    );
+  }
+
   return (
     <div className="app">
       <div className="sidebar">
-        <FriendsList
-          friends={friends}
-          onSelection={handleSelection}
-          selectedFriend={selectedFriend}
+        <MembersList
+          members={members}
+          onSelectMember={handelSelectMember}
+          selectedMember={selectedMember}
         />
-
-        {isOpen && <FormAddFriend onAddFriend={handleAddFriend} />}
-
-        <Button onClick={handleToggle}>
-          {isOpen ? "Close" : "Add Friend"}
+        {isOpen && <FormAddMember onAddMember={handleAddMember} />}
+        <Button onClick={handleToggleButton}>
+          {isOpen ? "Close" : "Add Member"}
         </Button>
       </div>
-      {selectedFriend && (
-        <FormSplitBill
-          selectedFriend={selectedFriend}
-          onSplitBill={handleSplitBill}
+      {selectedMember && (
+        <MemberTasksView
+          onCheckTasks={handleCheckTasks}
+          onNewTask={handleNewTask}
+          selectedMember={selectedMember}
         />
       )}
     </div>

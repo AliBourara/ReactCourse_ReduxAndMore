@@ -1,27 +1,27 @@
-export interface FriendsType {
+export interface MembersType {
   id: string;
   name: string;
   image: string;
-  balance: number;
+  task: { [key: string]: { id: string; content: string; state: boolean } };
 }
 
-export const initialFriends: FriendsType[] = [
+export const initialMembers: MembersType[] = [
   {
     id: "118836",
     name: "Clark",
     image: "https://i.pravatar.cc/48?u=118836",
-    balance: -7,
+    task: {},
   },
   {
     id: "933372",
     name: "Sarah",
     image: "https://i.pravatar.cc/48?u=933372",
-    balance: 20,
+    task: {},
   },
   {
     id: "499476",
     name: "Anthony",
     image: "https://i.pravatar.cc/48?u=499476",
-    balance: 0,
+    task: {},
   },
 ];
