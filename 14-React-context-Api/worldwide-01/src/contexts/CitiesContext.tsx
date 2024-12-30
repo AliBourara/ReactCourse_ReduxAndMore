@@ -1,4 +1,10 @@
-import { ReactNode, createContext, useEffect, useState } from "react";
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { Citiestype } from "../../data/data";
 import { BASE_URL } from "../App";
 
@@ -40,4 +46,12 @@ function CitiesProvider({ children }: CitiesProviderProp) {
     </CitiesContext.Provider>
   );
 }
-export { CitiesProvider };
+
+function useCities() {
+  const context = useContext(CitiesContext);
+  if (context === undefined)
+    throw new Error("CitiesContext was used outside The CitiesProvider");
+  return context;
+}
+
+export { CitiesProvider, useCities };
